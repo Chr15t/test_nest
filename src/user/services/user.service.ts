@@ -29,7 +29,12 @@ export class UserService {
   }
 
   async checkEmail(email: string, userId?: string) {
-    return userId ?  await this.userModel.findOne({ email: email }).lean() : await this.userModel.findOne({ email: email, _id: { $not: new Types.ObjectId(userId)}}).lean()
+    console.log(email, userId);
+    return userId ?  await this.userModel.findOne({ email: email }).lean() : await this.userModel.findOne({
+      _id: { $ne: new Types.ObjectId(userId) },
+      email: email,
+
+    }).lean();
   }
 
   async addUser(userDto: IUser): Promise<{ message: string; userId?: string }> {
@@ -60,14 +65,15 @@ export class UserService {
     }
   }
 
-  async updateUser(userDto: IUser, userId: string) {
+  async updateUser(userDto: Partial<IUser>, userId: string) {
     try {
 
       const foundEmail = await this.checkEmail(userDto.email, userId)
 
       if (foundEmail) throw new BadRequestException(`User with email ${userDto.email} already exists`);
+      const {password, ...rest} = userDto;
 
-      const updatedUser = await this.userModel.findByIdAndUpdate(userId, userDto, { new: true, runValidators: true });
+      const updatedUser = await this.userModel.findByIdAndUpdate(userId, rest, { new: true, runValidators: true });
       
       if (!updatedUser) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       
