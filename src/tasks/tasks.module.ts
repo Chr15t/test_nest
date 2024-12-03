@@ -13,11 +13,11 @@ import { TasksService } from './services/tasks.service';
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }]),
-    UserModule,
 
   ],
   controllers: [TasksController],
   providers: [JwtService, TasksService],
+  exports: [TasksService],
 
 })
 export class TasksModule {}

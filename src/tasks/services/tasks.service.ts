@@ -8,12 +8,23 @@ import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class TasksService {
 
+
   constructor(
     @InjectModel(Task.name)
     private readonly taskModel: Model<Task>,
   ) {
 
   }
+
+  async getTaskByUserId(userId: string) {
+    try {
+      const listTask = await this.taskModel.find({ assigned: { $in: new Types.ObjectId(userId)}}, { name: 1}).lean() as unknown as any[]
+      return listTask;
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
  async  getListTask() {
     try {
       const listTask: ITask[] = await this.taskModel.find({}, { name: 1, assigned: 1, _id: 1}).lean() as unknown as ITask[];

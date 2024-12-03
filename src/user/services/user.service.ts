@@ -7,14 +7,16 @@ import { Model, ObjectId, Types } from 'mongoose';
 import { IUser } from '../interface/IUser';
 import { User } from '../model/User.model';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from '../dto/User.dto';
+import { TasksService } from 'src/tasks/services/tasks.service';
 @Injectable()
 export class UserService {
+
 
 
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<IUser>,
+    private readonly taskService: TasksService,
   ) {
 
   }
@@ -24,6 +26,15 @@ export class UserService {
       return { list: listUser}
     } catch (error) {
       throw new BadRequestException(error);
+    }
+  }
+
+  async getTasks(userId: string) {
+    try {
+      const listTasks = await this.taskService.getTaskByUserId(userId);
+      return { result: listTasks}
+    } catch (error) {
+      throw new BadRequestException(error)
     }
   }
 
