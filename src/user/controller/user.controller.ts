@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post,Delete, Param,Patch, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../guards/AuthGuards';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/User.dto';
@@ -20,6 +20,14 @@ export class UserController {
     return this.userService.addUser(userDto)
   }
 
+  @Delete('remove/:id')
+  deleteUser(@Param('id') userId: string) {
+    return this.userService.deleteUser(userId);
+  }
 
+  @Patch('update/:id')
+  updateUser(@Body() userDto: CreateUserDto, @Param('id') userId: string) {
+    return this.userService.updateUser(userDto, userId)
+  }
 
 }
