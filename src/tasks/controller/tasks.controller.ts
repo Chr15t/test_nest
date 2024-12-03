@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import { TasksService } from '../services/tasks.service';
-import { CreateTaskDto } from '../dto/tasks.dto';
+import { AssignedUserDto, CreateTaskDto } from '../dto/tasks.dto';
 import { Body, Controller, Get, Post,Delete, Param,Patch, UseGuards } from '@nestjs/common';
 
 @Controller('api/tasks')
@@ -34,5 +34,11 @@ export class TasksController {
   @Get('find/:id')
   findOneTask(@Param('id') taskId: string) {
     return this.taskService.getTaskById(taskId);
+  }
+
+  @Patch('assign/:id')
+  assignTask(@Param('id') taskId: string, @Body() dto: AssignedUserDto) {
+    const { assigned } = dto;
+    return this.taskService.assignTask(taskId, assigned)
   }
 }
