@@ -7,12 +7,13 @@ import { TasksModule } from './tasks/tasks.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Task, TaskSchema } from './tasks/model/task.model';
 import { User, UserSchema } from './user/model/User.model';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
     UserModule, 
     TasksModule,
-    MongooseModule.forRoot(process.env.MONGO_URI),
+    MongooseModule.forRoot("mongodb://127.0.0.1:27017/test_database"),
     MongooseModule.forFeature([
       {  name: User.name, schema: UserSchema },
       { name: Task.name, schema: TaskSchema}
@@ -20,6 +21,6 @@ import { User, UserSchema } from './user/model/User.model';
 
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtService],
 })
 export class AppModule {}

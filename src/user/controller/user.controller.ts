@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../guards/AuthGuards';
 import { UserService } from '../services/user.service';
+import { CreateUserDto } from '../dto/User.dto';
 @Controller('api/user')
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 export class UserController {
 
   constructor(
@@ -13,4 +14,12 @@ export class UserController {
   getList() {
     return this.userService.getList();
   }
+
+  @Post('add')
+  adduser(@Body() userDto: CreateUserDto) {
+    return this.userService.addUser(userDto)
+  }
+
+
+
 }

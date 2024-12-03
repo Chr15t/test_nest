@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
+import { IUser } from '../interface/IUser';
 
-export class CreateUserDto {
+export class CreateUserDto implements IUser {
   @IsString()
   @IsNotEmpty()
   username: string;
