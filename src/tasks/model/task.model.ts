@@ -13,7 +13,7 @@ export class Task implements ITask {
   @Prop({ type: String, required: true})
   name: string;
 
-  @Prop({ type: Array<ObjectId>, ref: User.name })
+  @Prop({ type: Array<ObjectId>, ref: User.name, default: [] })
   assigned: ObjectId[];
 }
 export const TaskSchema = SchemaFactory.createForClass(Task)

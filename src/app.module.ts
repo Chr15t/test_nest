@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -8,6 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Task, TaskSchema } from './tasks/model/task.model';
 import { User, UserSchema } from './user/model/User.model';
 import { JwtService } from '@nestjs/jwt';
+import { ValidationMiddleware } from './middleware/globalmiddleware';
 
 @Module({
   imports: [
@@ -23,4 +24,8 @@ import { JwtService } from '@nestjs/jwt';
   controllers: [AppController],
   providers: [AppService, JwtService],
 })
-export class AppModule {}
+export class AppModule implements NestModule  {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ValidationMiddleware).forRoutes('*');
+  }
+}

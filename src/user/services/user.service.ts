@@ -20,11 +20,10 @@ export class UserService {
   }
   async getList() {
     try {
-      
       const listUser = await this.userModel.find({}, { username: 1, _id: 1, email: 1}).lean();
       return { list: listUser}
     } catch (error) {
-      
+      throw new BadRequestException(error);
     }
   }
 
